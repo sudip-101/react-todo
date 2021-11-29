@@ -11,7 +11,6 @@ const Todo: React.FC = () => {
   //     console.log(savedTasks);
   //   }
   // }, []);
-  const [todoRemaining, setTodoRemaining] = useState<number>();
   const [tasks, setTasks] = useState<ITaskArr[]>([
     // {
     //   title: "Do assignments",
@@ -29,13 +28,13 @@ const Todo: React.FC = () => {
   const [todoMap, setTodoMap] = useState<Map<string, ITaskArr[]>>(new Map([]));
 
   const addTask = (title: string, time: string, date: string) => {
-    const newTasks = [...tasks, { title, done: false, time }];
-    // const newTask = [{ title, done: false, time }];
-    setTasks(newTasks);
-    console.log(newTasks);
-    setTodoMap(todoMap.set(date, [{ title, done: false, time }]));
-    console.log(todoMap.get(date));
-    console.log(todoMap);
+    setTodoMap((prev) => {
+      const newMap = new Map(prev);
+      const val = newMap.get(date);
+      if(val)
+        return newMap.set(date, [...val, {title, done: false, time}]);
+      return newMap.set(date, [{title, done: false, time}]);
+    });
   };
 
   const completeTask = (index: number) => {
@@ -57,16 +56,18 @@ const Todo: React.FC = () => {
     setTasks(newTasks);
   };
 
-  useEffect(() => {
-    setTodoRemaining(
-      (prevTodoRemaining) => tasks.filter((task) => !task.done).length
-    );
-  }, [tasks.length]);
-
   // useEffect(() => {
   //   const json = JSON.stringify(tasks);
   //   localStorage.setItem("tasks", json);
   // }, [tasks]);
+  
+  const todoRemaining = React.useMemo(() => {
+    const today = new Date();
+    const val = todoMap.get(today.toISOString());
+    if(val)
+      return val.filter(i => i.done).length;
+    return 0;
+  }, [todoMap]);
 
   return (
     <div className="todos-box">
