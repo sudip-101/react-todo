@@ -1,0 +1,17 @@
+.react-datepicker-popper {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  left: 50% !important;
+  transform: translate3d(0px, 161.6px, 0px) translateX(-50%) !important;
+  margin: auto;
+  width: max-content;
+}
+
+.create-task {
+  .create-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+}
