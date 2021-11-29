@@ -12,16 +12,16 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
     e.preventDefault();
     if (!title && !time) return;
 
-    addTask(title, time);
+    addTask(title, time, startDate?.toISOString());
     setTitle("");
     setTime("");
   };
   return (
     <div className="create-task">
-      {/* <DatePicker
+      <DatePicker
         selected={startDate}
         onChange={(date: Date | null) => setStartDate(date)}
-      /> */}
+      />
       <form onSubmit={handleSubmit} className="create-form">
         <input
           type="text"

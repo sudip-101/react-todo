@@ -1,4 +1,4 @@
 interface ICreateTaskProps {
-    addTask: (string, string, /*string*/) => void,
+    addTask: (string, string, string) => void,
     // tasks: Array 
 }

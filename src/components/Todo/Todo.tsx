@@ -3,14 +3,14 @@ import CreateTask from "../CreateTask/CreateTask";
 import Task from "../Task/Task";
 
 const Todo: React.FC = () => {
-  useEffect(() => {
-    const json: string = localStorage.getItem("tasks") || "{}";
-    const savedTasks = JSON.parse(json);
-    if (savedTasks) {
-      setTasks(savedTasks);
-      console.log(savedTasks);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const json: string = localStorage.getItem("tasks") || "{}";
+  //   const savedTasks = JSON.parse(json);
+  //   if (savedTasks) {
+  //     setTasks(savedTasks);
+  //     console.log(savedTasks);
+  //   }
+  // }, []);
   const [todoRemaining, setTodoRemaining] = useState<number>();
   const [tasks, setTasks] = useState<ITaskArr[]>([
     // {
@@ -26,16 +26,16 @@ const Todo: React.FC = () => {
     //   done: false,
     // },
   ]);
-  // const [todoMap, setTodoMap] = useState(new Map([]));
+  const [todoMap, setTodoMap] = useState<Map<string, ITaskArr[]>>(new Map([]));
 
-  const addTask = (title: string, time: string /*date: string*/) => {
+  const addTask = (title: string, time: string, date: string) => {
     const newTasks = [...tasks, { title, done: false, time }];
     // const newTask = [{ title, done: false, time }];
     setTasks(newTasks);
     console.log(newTasks);
-    // setTodoMap(todoMap.set(date, newTasks));
-    // console.log(todoMap.get(date));
-    // console.log(todoMap);
+    setTodoMap(todoMap.set(date, [{ title, done: false, time }]));
+    console.log(todoMap.get(date));
+    console.log(todoMap);
   };
 
   const completeTask = (index: number) => {
@@ -63,16 +63,19 @@ const Todo: React.FC = () => {
     );
   }, [tasks.length]);
 
-  useEffect(() => {
-    const json = JSON.stringify(tasks);
-    localStorage.setItem("tasks", json);
-  }, [tasks]);
+  // useEffect(() => {
+  //   const json = JSON.stringify(tasks);
+  //   localStorage.setItem("tasks", json);
+  // }, [tasks]);
 
   return (
     <div className="todos-box">
       <h1>ToDo List</h1>
       <h2>Pending Tasks - {todoRemaining}</h2>
       <div className="todo-list">
+        {[...todoMap.keys()].map((key) => (
+          <h3>{key}</h3>
+        ))}
         {tasks.map((task, index) => (
           <Task
             // todoMap={todoMap}
