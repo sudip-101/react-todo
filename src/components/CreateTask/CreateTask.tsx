@@ -12,7 +12,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
     e.preventDefault();
     if (!title && !time) return;
 
-    addTask(title, time /*startDate*/);
+    addTask(title, time);
     setTitle("");
     setTime("");
   };
@@ -27,12 +27,14 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
           type="text"
           value={title}
           placeholder="Add a new ToDo"
-          onChange={(e) => setTitle((prevTitle) => e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
+          required
         />
         <input
           type="time"
           value={time}
-          onChange={(e) => setTime((prevTime) => e.target.value)}
+          onChange={(e) => setTime(e.target.value)}
+          required
         />
         <button type="submit">Save</button>
       </form>
