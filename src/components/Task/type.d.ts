@@ -1,5 +1,5 @@
 interface ITaskProps {
-    // todoMap: Map
+    todoMap: Map<string, ITaskArr[]>
     task: {
         title: string,
         done: boolean,

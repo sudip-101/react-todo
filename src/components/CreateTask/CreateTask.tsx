@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateTask.scss";
+import moment from "moment";
 
 const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -12,31 +13,51 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
     e.preventDefault();
     if (!title && !time) return;
 
-    addTask(title, time, startDate?.toISOString());
+    addTask(title, time, moment(startDate).format("Do MMMM YYYY"));
     setTitle("");
     setTime("");
   };
   return (
     <div className="create-task">
-      <DatePicker
-        selected={startDate}
-        onChange={(date: Date | null) => setStartDate(date)}
-      />
+      <div className="date-picker">
+        <p>Add a Date -</p>
+        <DatePicker
+          selected={startDate}
+          onChange={(date: Date | null) => setStartDate(date)}
+          dateFormat={"dd/MM/yyyy"}
+        />
+      </div>
       <form onSubmit={handleSubmit} className="create-form">
-        <input
-          type="text"
-          value={title}
-          placeholder="Add a new ToDo"
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          required
-        />
-        <button type="submit">Save</button>
+        <div className="form-detail new-todo">
+          <label htmlFor="todo">Add a New To-Do :</label>
+          <input
+            className="form-input"
+            type="text"
+            value={title}
+            name="todo"
+            id="todo"
+            placeholder="Enter a To-Do"
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-detail todo-time">
+          <label htmlFor="time">Enter Deadline :</label>
+          <input
+            className="form-input time-input"
+            type="time"
+            value={time}
+            name="time"
+            id="time"
+            onChange={(e) => setTime(e.target.value)}
+            required
+          />
+        </div>
+        <div className="todo-save">
+          <button className="submit-btn" type="submit">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

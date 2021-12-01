@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&display=swap");
+.todos-box {
+  .header {
+    padding: $padding-big;
+    background: $lightgrey;
+    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    @media only screen and (max-width: 548px) {
+      padding: $padding-small;
+    }
+    .logo {
+      line-height: 1;
+      font-size: 40px;
+      font-family: "Lilita One", cursive;
+      color: $light-black;
+    }
+  }
+  .create-task-container {
+    padding: $padding-big;
+    border-bottom: 2px solid $accent;
+    @media only screen and (max-width: 768px) {
+      padding: $padding-small;
+    }
+  }
+  .todo-card-container {
+    padding: $padding-big;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    @media only screen and (max-width: 768px) {
+      padding: $padding-small;
+      gap: $padding-small;
+    }
+    @media only screen and (max-width: 400px) {
+      padding: $padding-mob;
+      gap: 20px;
+    }
+    .card {
+      text-align: center;
+      background: $lightgrey;
+      padding: $padding-small;
+      @media only screen and (max-width: 400px) {
+        padding: $padding-mob;
+      }
+      border-radius: $br-mid;
+      h2 {
+        margin-bottom: 6px;
+        color: $light-black;
+      }
+      .pending-task {
+        margin-bottom: 12px;
+      }
+      .task-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  }
+}
