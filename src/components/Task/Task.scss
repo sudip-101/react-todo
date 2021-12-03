@@ -28,9 +28,11 @@
     gap: 20px;
     .btn-task {
       background: $accent-dark;
-      transition: background 250ms ease-in-out;
-      &:hover {
-        background: $accent-dark-hover;
+      @media only screen and (hover: hover) {
+        transition: background 250ms ease-in-out;
+        &:hover {
+          background: $accent-dark-hover;
+        }
       }
     }
   }
