@@ -25,6 +25,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
           selected={startDate}
           onChange={(date: Date | null) => setStartDate(date)}
           dateFormat={"dd/MM/yyyy"}
+          minDate={new Date()}
         />
       </div>
       <form onSubmit={handleSubmit} className="create-form">
@@ -39,6 +40,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ addTask }) => {
             placeholder="Enter a To-Do"
             onChange={(e) => setTitle(e.target.value)}
             required
+            autoComplete="off"
           />
         </div>
         <div className="form-detail todo-time">

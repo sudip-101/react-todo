@@ -3,7 +3,7 @@
   .header {
     padding: $padding-big;
     background: $lightgrey;
-    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.5);
     text-align: center;
     @media only screen and (max-width: 548px) {
       padding: $padding-small;
@@ -25,7 +25,11 @@
   .todo-card-container {
     padding: $padding-big;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, max-content));
+    @media only screen and (max-width: 700px) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    justify-content: center;
     gap: 40px;
     @media only screen and (max-width: 768px) {
       padding: $padding-small;
@@ -39,6 +43,9 @@
       text-align: center;
       background: $lightgrey;
       padding: $padding-small;
+      @media only screen and (min-width: 860px) {
+        padding: $padding-big;
+      }
       @media only screen and (max-width: 400px) {
         padding: $padding-mob;
       }
@@ -48,7 +55,9 @@
         color: $light-black;
       }
       .pending-task {
-        margin-bottom: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid $accent-dark;
       }
       .task-container {
         display: flex;

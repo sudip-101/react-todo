@@ -3,25 +3,29 @@ import CreateTask from "../CreateTask/CreateTask";
 import Task from "../Task/Task";
 
 const Todo: React.FC = () => {
-  // useEffect(() => {
-  //   const json: string = localStorage.getItem("todoList") || "[]";
-  //   const savedTasks = JSON.parse(json);
-  //   console.log(json);
-  //   if (savedTasks) {
-  //     setTodoMap(new Map(savedTasks));
-  //     console.log(savedTasks);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const json: string = localStorage.getItem("todoList") || "{}";
+    const savedTasks = JSON.parse(json);
+    if (savedTasks) {
+      setTodoMap(new Map(Object.entries(savedTasks)));
+    }
+  }, []);
   const [todoMap, setTodoMap] = useState<Map<string, ITaskArr[]>>(new Map([]));
 
   const addTask = (title: string, time: string, date: string) => {
     setTodoMap((prev) => {
       const newMap = new Map(prev);
       const val = newMap.get(date);
-      if (val) return newMap.set(date, [...val, { title, done: false, time }]);
+      if (val) {
+        const newTasks = [...val, { title, done: false, time }].sort((a, b) =>
+          a.time.localeCompare(b.time)
+        );
+        updateLocalStorage(newMap.set(date, newTasks));
+        return newMap.set(date, newTasks);
+      }
+      updateLocalStorage(newMap.set(date, [{ title, done: false, time }]));
       return newMap.set(date, [{ title, done: false, time }]);
     });
-    updateLocalStorage(todoMap);
   };
 
   const completeTask = (index: number, date: string, done: boolean) => {
@@ -30,38 +34,50 @@ const Todo: React.FC = () => {
       const value = newMap.get(date);
       if (value) {
         value[index].done = done;
+        updateLocalStorage(newMap.set(date, [...value]));
         return newMap.set(date, [...value]);
       }
       return newMap;
     });
-    updateLocalStorage(todoMap);
   };
 
   const removeTask = (index: number, date: string) => {
-    setTodoMap((prev) => {
-      const newMap = new Map(prev);
-      const value = newMap.get(date);
-      if (value) {
-        if (window.confirm("Do you want to remove the task?"))
-          value.splice(index, 1);
-        return newMap.set(date, [...value]);
-      }
-      return newMap;
-    });
-    updateLocalStorage(todoMap);
+    if (window.confirm("Do you want to remove the task?"))
+      setTodoMap((prev) => {
+        const newMap = new Map(prev);
+        console.log(newMap);
+        const value = newMap.get(date);
+        console.log(value);
+        if (value) {
+          const newVal = value.filter((obj, i) => i !== index);
+          console.log(newVal);
+          if (newVal.length === 0) {
+            newMap.delete(date);
+            console.log(newMap);
+            updateLocalStorage(newMap);
+            return newMap;
+          }
+          updateLocalStorage(newMap.set(date, [...newVal]));
+          return newMap.set(date, [...newVal]);
+        }
+        return newMap;
+      });
   };
 
   const updateLocalStorage = (localMap: Map<string, ITaskArr[]>) => {
-    const json = JSON.stringify(localMap);
+    const obj = Object.fromEntries(localMap);
+    const json = JSON.stringify(obj);
     localStorage.setItem("todoList", json);
   };
 
-  const todoRemaining = React.useMemo(() => {
-    const today = new Date();
-    const val = todoMap.get(today.toISOString());
-    if (val) return val.filter((i) => i.done).length;
-    return 0;
-  }, [todoMap]);
+  const todoRemaining = React.useCallback(
+    (key: string) => {
+      const val = todoMap.get(key);
+      if (val) return val.filter((i) => !i.done).length;
+      return 0;
+    },
+    [todoMap]
+  );
 
   return (
     <div className="todos-box">
@@ -75,7 +91,7 @@ const Todo: React.FC = () => {
         {[...todoMap.keys()].map((key) => (
           <div className="card">
             <h2>{key}</h2>
-            <p className="pending-task">Pending Tasks - {todoRemaining}</p>
+            <p className="pending-task">Pending Tasks - {todoRemaining(key)}</p>
             <div className="task-container">
               {todoMap.get(key)?.map((task, index) => (
                 <Task

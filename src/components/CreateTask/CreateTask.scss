@@ -71,6 +71,10 @@
       align-items: flex-end;
       .submit-btn {
         background: $accent;
+        transition: background 250ms ease-in-out;
+        &:hover {
+          background: $accent-hover;
+        }
       }
     }
   }
